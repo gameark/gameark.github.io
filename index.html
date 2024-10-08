@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>레트로 모바일 아크</title>
+    <style>
+        body {
+            background-color: #282a2e;
+            color: #d5d8e1;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            user-select: none;
+        }
+        body.modal-open {
+            overflow: hidden;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #33353a;
+            border-radius: 20px;
+            padding: 5px 15px;
+            width: 400px;
+        }
+        .search-icon {
+            color: #d5d8e1;
+            margin-right: 10px;
+        }
+        #search {
+            flex-grow: 1;
+            padding: 10px;
+            background-color: #282a2e;
+            border: none;
+            color: #d5d8e1;
+            outline: none;
+        }
+        #search::placeholder {
+            color: #888;
+        }
+        .clear-search {
+            color: #888;
+            cursor: pointer;
+            font-size: 18px;
+            margin-left: 10px;
+            transition: color 0.3s;
+        }
+        .clear-search:hover {
+            color: #fff;
+        }
+        .tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .tag {
+            margin: 3px;
+            padding: 5px 10px;
+            background-color: #3a3d42;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+        .tag.selected {
+            background-color: #d5d8e1;
+            color: #282a2e;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 240px);
+            gap: 20px;
+            max-width: 1300px;
+            margin: 0 auto;
+            justify-content: center;
+        }
+        .item {
+            background-color: #3a3d42;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 240px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+        .item:hover {
+            background-color: #4a4d52;
+        }
+        .item-image-container {
+            position: relative;
+            width: 240px;
+            height: 280px;
+            overflow: hidden;
+        }
+        .item img {
+            width: 240px;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 8px 8px 0 0;
+            transition: transform 0.3s ease;
+        }
+        .item:hover img {
+            transform: scale(1.05);
+        }
+        .item-tags {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .item-tag {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 0.7em;
+        }
+        .item h3 {
+            margin: 10px;
+            font-size: 0.85em;
+            text-align: center;
+        }
+        .loading {
+            text-align: center;
+            font-size: 1.2em;
+            margin-top: 50px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+        .modal-content {
+            background-color: #3a3d42;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            height: 80%;
+            max-height: 700px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .modal-image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        #modal-image {
+            max-width: 90%;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        .modal-profile {
+            background-color: #2a2c30;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .modal-profile h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .modal-profile p {
+            margin-bottom: 10px;
+        }
+        .download-button {
+            display: inline-block;
+            background-color: #4a4d52;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s;
+            word-break: break-all;
+            max-width: 100%;
+        }
+        .download-button:hover {
+            background-color: #5a5d62;
+        }
+        .download-icon {
+            margin-right: 5px;
+        }
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-modal:hover {
+            color: #888;
+        }
+        
+        @media (min-width: 1300px) {
+            .grid {
+                grid-template-columns: repeat(5, 240px);
+            }
+        }
+        @media (max-width: 1299px) and (min-width: 1040px) {
+            .grid {
+                grid-template-columns: repeat(4, 240px);
+            }
+        }
+        @media (max-width: 1039px) and (min-width: 780px) {
+            .grid {
+                grid-template-columns: repeat(3, 240px);
+            }
+        }
+        @media (max-width: 779px) and (min-width: 520px) {
+            .grid {
+                grid-template-columns: repeat(2, 240px);
+            }
+        }
+        @media (max-width: 519px) {
+            .grid {
+                grid-template-columns: 240px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>레트로 모바일 아크</h1>
+    </div>
+    <div class="search-container">
+        <div class="search-bar">
+            <span class="search-icon">&#128269;</span>
+            <input type="text" id="search" placeholder="게임 이름">
+            <span class="clear-search" id="clearSearch">✕</span>
+        </div>
+    </div>
+    <div class="tags">
+        <div class="tag" data-tag="Brew">Brew</div>
+        <div class="tag" data-tag="J2ME">J2ME</div>
+        <div class="tag" data-tag="KTF">KTF</div>
+        <div class="tag" data-tag="LGT">LGT</div>
+        <div class="tag" data-tag="SKVM">SKVM</div>
+        <div class="tag" data-tag="GVM">GVM</div>
+        <div class="tag" data-tag="apk">apk</div>
+        <div class="tag" data-tag="ipa">ipa</div>
+        <div class="tag" data-tag="기타">기타</div>
+    </div>
+    <div class="grid" id="grid">
+        <div class="loading">로딩 중...</div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-image-container">
+                <img id="modal-image" src="" alt="Game Image">
+            </div>
+            <div id="modal-platforms"></div>
+        </div>
+    </div>
+
+    <script>
+        let items = [];
+        const grid = document.getElementById('grid');
+        const search = document.getElementById('search');
+        const clearSearch = document.getElementById('clearSearch');
+        const tags = document.querySelectorAll('.tag');
+        const modal = document.getElementById('modal');
+        const modalImage = document.getElementById('modal-image');
+        const closeModal = document.querySelector('.close-modal');
+
+        let selectedTag = '';
+
+        function getFileName(path) {
+            return path.split('/').pop();
+        }
+
+        function renderItems() {
+            const searchTerm = search.value.toLowerCase();
+            const filteredItems = items.filter(item => 
+                item.name.toLowerCase().includes(searchTerm) && 
+                (selectedTag === '' || item.tags.includes(selectedTag))
+            );
+
+            grid.innerHTML = filteredItems.map(item => `
+                <div class="item" data-image="/img/${item.image}">
+                    <div class="item-image-container">
+                        <img src="/img/${item.image}" alt="${item.name}" onerror="this.onerror=null; this.src='/img/none.jpg';">
+                        <div class="item-tags">
+                            ${item.tags.map(tag => `<span class="item-tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                    <h3>${item.name}</h3>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const gameData = items.find(game => game.name === this.querySelector('h3').textContent);
+                    modalImage.src = `/img/${gameData.image}`;
+                    modalImage.alt = gameData.name;
+                    
+                    const platformsHTML = ['Brew', 'KTF', 'LGT', 'SKVM', 'GVM', 'J2ME', 'apk', 'ipa', '기타']
+                        .filter(platform => gameData[platform] || gameData[platform + '2'] || gameData[platform + 'D'])
+                        .map(platform => {
+                            let html = `<div class="modal-profile"><h3>${platform}</h3>`;
+                            if (gameData[platform + 'D']) {
+                                html += `<p>${gameData[platform + 'D']}</p>`;
+                            }
+                            if (gameData[platform]) {
+                                const fileName = getFileName(gameData[platform]);
+                                html += `<a href="/file/${gameData[platform]}" class="download-button" download><span class="download-icon">&#8595;</span>${fileName}</a>`;
+                            }
+                            if (gameData[platform + '2']) {
+                                const fileName2 = getFileName(gameData[platform + '2']);
+                                html += `<a href="/file/${gameData[platform + '2']}" class="download-button" download><span class="download-icon">&#8595;</span>${fileName2}</a>`;
+                            }
+                            html += '</div>';
+                            return html;
+                        }).join('');
+                    
+                    document.getElementById('modal-platforms').innerHTML = platformsHTML;
+                    
+                    modal.style.display = 'flex';
+                    document.body.classList.add('modal-open');
+                });
+            });
+        }
+
+        function closeModalFunction() {
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+        }
+
+        search.addEventListener('input', renderItems);
+
+        clearSearch.addEventListener('click', () => {
+            search.value = '';
+            renderItems();
+        });
+
+        tags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                const clickedTag = tag.dataset.tag;
+                if (selectedTag === clickedTag) {
+                    selectedTag = '';
+                    tag.classList.remove('selected');
+                } else {
+                    tags.forEach(t => t.classList.remove('selected'));
+                    selectedTag = clickedTag;
+                    tag.classList.add('selected');
+                }
+                renderItems();
+            });
+        });
+
+        closeModal.addEventListener('click', closeModalFunction);
+
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeModalFunction();
+            }
+        });
+
+        fetch('games.json')
+            .then(response => response.json())
+            .then(data => {
+                items = data;
+                renderItems();
+            })
+            .catch(error => {
+                console.error('Error loading game data:', error);
+                grid.innerHTML = '<p>게임 데이터를 불러오는 중 오류가 발생했습니다.</p>';
+            });
+    </script>
+</body>
+</html>
