@@ -5,6 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>레트로 모바일 아크</title>
     <style>
+        /* 스크롤바 스타일 */
+        ::-webkit-scrollbar {
+            width: 12px; /* 스크롤바의 너비 */
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent; /* 스크롤바 배경을 투명하게 설정 */
+            border-radius: 8px; /* 스크롤바 외곽선을 둥글게 설정 */
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background-color: #3F4147; /* 스크롤 영역의 색상 */
+            border-radius: 8px; /* 스크롤 영역 외곽선을 둥글게 설정 */
+        }
+        
+        /* 마우스 오버 시 효과 */
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #555; /* 마우스 오버 시 스크롤 영역의 색상 */
+        }        
+        
         body {
             background-color: #282a2e;
             color: #d5d8e1;
@@ -151,11 +171,11 @@
             overflow-y: auto;
         }
         .modal-content {
-            background-color: #3a3d42;
+            background-color: #33353a;
             padding: 20px;
             border-radius: 10px;
-            width: 80%;
-            max-width: 500px;
+            width: 90%;
+            max-width: 700px;
             height: 80%;
             max-height: 700px;
             position: relative;
@@ -192,7 +212,7 @@
             display: inline-block;
             background-color: #4a4d52;
             color: #fff;
-            padding: 8px 12px;
+            padding: 6px 10px;
             border-radius: 5px;
             text-decoration: none;
             margin-right: 10px;
@@ -200,6 +220,7 @@
             transition: background-color 0.3s;
             word-break: break-all;
             max-width: 100%;
+			font-size: 0.85em;
         }
         .download-button:hover {
             background-color: #5a5d62;
@@ -245,11 +266,66 @@
                 grid-template-columns: 240px;
             }
         }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination button {
+            background-color: #3a3d42;
+            color: #d5d8e1;
+            border: none;
+            padding: 8px 12px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .pagination button:hover {
+            background-color: #4a4d52;
+        }
+        .pagination button.active {
+            background-color: #d5d8e1;
+            color: #282a2e;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #3a3d42;
+            color: #d5d8e1;
+            border-radius: 10px;
+            position: relative;
+        }
+		
+		.info-buttons {
+ 		   text-align: center;
+  		  margin-bottom: 20px;
+		}
+
+		.info-buttons button {
+  		  background-color: #4a4d52;
+   		 color: #fff;
+  		  border: none;
+   		 padding: 10px 15px;
+   		 border-radius: 5px;
+   		 margin: 0 10px;
+   		 cursor: pointer;
+   		 transition: background-color 0.3s;
+		}
+
+		.info-buttons button:hover {
+ 		  background-color: #5a5d62;
+		}
     </style>
 </head>
 <body>
     <div class="header">
         <h1>레트로 모바일 아크</h1>
+		<div class="info-buttons">
+  		  <button id="aboutButton">사이트 소개</button>
+   		 <button id="howToPlayButton">플레이 방법</button>
+		</div>
     </div>
     <div class="search-container">
         <div class="search-bar">
@@ -260,7 +336,8 @@
     </div>
     <div class="tags">
         <div class="tag" data-tag="Brew">Brew</div>
-        <div class="tag" data-tag="J2ME">J2ME</div>
+        <div class="tag" data-tag="JavaStation">JavaStation</div>
+		<div class="tag" data-tag="J2ME">J2ME</div>
         <div class="tag" data-tag="KTF">KTF</div>
         <div class="tag" data-tag="LGT">LGT</div>
         <div class="tag" data-tag="SKVM">SKVM</div>
@@ -272,6 +349,8 @@
     <div class="grid" id="grid">
         <div class="loading">로딩 중...</div>
     </div>
+	
+	<div class="pagination" id="pagination"></div> <!-- 페이지 네비게이션 추가 -->
 
     <div id="modal" class="modal">
         <div class="modal-content">
@@ -279,9 +358,30 @@
             <div class="modal-image-container">
                 <img id="modal-image" src="" alt="Game Image">
             </div>
+            <div id="modal-info" class="modal-profile"></div>
             <div id="modal-platforms"></div>
         </div>
     </div>
+	
+	<div id="aboutModal" class="modal">
+   	 <div class="modal-content">
+      	  <span class="close-modal">&times;</span>
+       	 <h2>사이트 소개</h2>
+      	  <p><strong>[사이트 운영 목적]</strong><br>
+      	  '레트로 모바일 아크'는 고전 피처폰 게임의 아카이브를 목적으로 하는 사이트입니다. 본 사이트의 목표는 고전 게임의 역사를 보존하고, 정보의 유실을 방지하기 위함입니다.</p>
+       	 <p><strong>[저작권 관련 사항]</strong><br>
+       	 본 사이트에서는 판매 및 서비스가 중단된 지 오래되어 저작권자가 수익을 창출하고 있지 않은 게임들만 보존하고 있습니다. 저희는 저작권자의 권리를 존중하며, 저작권자가 파일 삭제를 요청하실 경우 즉시 해당 파일을 내릴 것입니다. 관련 문의는 이 이메일 주소로 연락 주시기 바랍니다: <a href="mailto:rikandev@gmail.com" style="color: #d5d8e1;">rikandev@gmail.com</a></p>
+       	 <p><strong>[비영리적 운영]</strong><br>
+     	   '레트로 모바일 아크'는 비상업적 목적으로 운영되며, 어떠한 수익 창출도 하지 않습니다. 저작권자의 요청에 따라 필요한 조치를 취할 것입니다. 본 사이트의 목적은 공공의 이익을 위한 자료 보존에 기여하기 위함입니다.</p>
+   	 </div>
+	</div>
+	
+	<div id="howToPlayModal" class="modal">
+  	  <div class="modal-content">
+      	  <span class="close-modal">&times;</span>
+    	</div>
+	</div>
+
 
     <script>
         let items = [];
@@ -292,8 +392,11 @@
         const modal = document.getElementById('modal');
         const modalImage = document.getElementById('modal-image');
         const closeModal = document.querySelector('.close-modal');
+        const pagination = document.getElementById('pagination');
 
         let selectedTag = '';
+        let currentPage = 1;
+        const itemsPerPage = 15;
 
         function getFileName(path) {
             return path.split('/').pop();
@@ -306,7 +409,12 @@
                 (selectedTag === '' || item.tags.includes(selectedTag))
             );
 
-            grid.innerHTML = filteredItems.map(item => `
+            const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const itemsToShow = filteredItems.slice(startIndex, endIndex);
+
+            grid.innerHTML = itemsToShow.map(item => `
                 <div class="item" data-image="/img/${item.image}">
                     <div class="item-image-container">
                         <img src="/img/${item.image}" alt="${item.name}" onerror="this.onerror=null; this.src='/img/none.jpg';">
@@ -318,48 +426,126 @@
                 </div>
             `).join('');
 
+            updatePagination(totalPages);
+            addItemClickListeners();
+        }
+
+        function updatePagination(totalPages) {
+            pagination.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.className = i === currentPage ? 'active' : '';
+                button.addEventListener('click', () => {
+                    currentPage = i;
+                    renderItems();
+                });
+                pagination.appendChild(button);
+            }
+        }
+
+        function addItemClickListeners() {
             document.querySelectorAll('.item').forEach(item => {
                 item.addEventListener('click', function() {
                     const gameData = items.find(game => game.name === this.querySelector('h3').textContent);
                     modalImage.src = `/img/${gameData.image}`;
                     modalImage.alt = gameData.name;
+					
+                    // 게임 정보 표시 추가
+					const modalInfo = document.getElementById('modal-info');
+					if (gameData.info) {
+						modalInfo.style.display = 'block';
+						
+						// 이미지와 유튜브 링크를 HTML로 변환
+						let processedInfo = gameData.info
+							// 이미지 변환 (img=filename.jpg => <img src="/img/filename.jpg">)
+							.replace(/img=([^\s]+)/g, '<img src="/img/$1" style="max-width: 100%; height: auto; margin: 10px 0; border-radius: 8px;">')
+							// 유튜브 변환 (youtube=VIDEO_ID => iframe)
+							.replace(/youtube=([^\s]+)/g, '<div style="position: relative; padding-bottom: 56.25%; height: 0; margin: 10px 0;"><iframe src="https://www.youtube.com/embed/$1" frameborder="0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 8px;" allowfullscreen></iframe></div>');
+
+						modalInfo.innerHTML = processedInfo;
+					} else {
+						modalInfo.style.display = 'none';
+					}
                     
-                    const platformsHTML = ['Brew', 'KTF', 'LGT', 'SKVM', 'GVM', 'J2ME', 'apk', 'ipa', '기타']
-                        .filter(platform => gameData[platform] || gameData[platform + '2'] || gameData[platform + 'D'])
-                        .map(platform => {
-                            let html = `<div class="modal-profile"><h3>${platform}</h3>`;
-                            if (gameData[platform + 'D']) {
-                                html += `<p>${gameData[platform + 'D']}</p>`;
-                            }
-                            if (gameData[platform]) {
-                                const fileName = getFileName(gameData[platform]);
-                                html += `<a href="/file/${gameData[platform]}" class="download-button" download><span class="download-icon">&#8595;</span>${fileName}</a>`;
-                            }
-                            if (gameData[platform + '2']) {
-                                const fileName2 = getFileName(gameData[platform + '2']);
-                                html += `<a href="/file/${gameData[platform + '2']}" class="download-button" download><span class="download-icon">&#8595;</span>${fileName2}</a>`;
-                            }
-                            html += '</div>';
-                            return html;
-                        }).join('');
+                    const platformGuides = {
+                        'Brew': 'https://blog.naver.com/rikandev/223638143739',
+                        'KTF': 'https://링크2',
+                        'LGT': 'https://링크3',
+                        'SKVM': 'https://링크4',
+                        'GVM': 'https://링크5',
+                        'JavaStation': 'https://링크6',
+                        'J2ME': 'https://링크J',
+                        'apk': 'https://링크7',
+                        'ipa': 'https://링크8',
+                    };
                     
-                    document.getElementById('modal-platforms').innerHTML = platformsHTML;
-                    
-                    modal.style.display = 'flex';
-                    document.body.classList.add('modal-open');
-                });
-            });
-        }
+		const platformsHTML = ['Brew', 'KTF', 'LGT', 'SKVM', 'GVM', 'JavaStation', 'J2ME', 'apk', 'ipa', '기타']
+			.filter(platform => gameData[platform] || gameData[platform + '2'] || gameData[platform + 'D'])
+			.map(platform => {
+				let html = `<div class="modal-profile">
+					<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+						<h3 style="margin: 0;">${platform}</h3>
+						${platformGuides[platform] ? 
+							`<button onclick="window.open('${platformGuides[platform]}', '_blank')" 
+								style="background-color: #4a4d52; color: white; border: none; 
+								padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.9em;">
+								플레이 방법
+							</button>` : 
+							''}
+					</div>`;
+				
+				if (gameData[platform + 'D']) {
+					html += `<p>${gameData[platform + 'D']}</p>`;
+				}
+				if (gameData[platform]) {
+					const fileName = getFileName(gameData[platform]);
+					html += `<a href="/file/${gameData[platform]}" class="download-button" download>
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-download" style="vertical-align: middle;">
+									<path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
+									<path d="M7 11l5 5l5 -5"></path>
+									<path d="M12 4l0 12"></path>
+								</svg>
+								<span style="display: inline-block; vertical-align: middle;">${fileName}</span>
+							  </a>`;
+				}
+				if (gameData[platform + '2']) {
+					const fileName2 = getFileName(gameData[platform + '2']);
+					html += `<a href="/file/${gameData[platform + '2']}" class="download-button" download>
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tabler-icon tabler-icon-download" style="vertical-align: middle;">
+									<path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
+									<path d="M7 11l5 5l5 -5"></path>
+									<path d="M12 4l0 12"></path>
+								</svg>
+								<span style="display: inline-block; vertical-align: middle;">${fileName2}</span>
+							  </a>`;
+				}
+				html += '</div>';
+				return html;
+			}).join('');
+							
+							document.getElementById('modal-platforms').innerHTML = platformsHTML;
+							
+							modal.style.display = 'flex';
+							document.body.classList.add('modal-open');
+						});
+					});
+				}
+
 
         function closeModalFunction() {
             modal.style.display = 'none';
             document.body.classList.remove('modal-open');
         }
 
-        search.addEventListener('input', renderItems);
+        search.addEventListener('input', () => {
+            currentPage = 1; // Reset to first page on new search
+            renderItems();
+        });
 
         clearSearch.addEventListener('click', () => {
             search.value = '';
+            currentPage = 1; // Reset to first page
             renderItems();
         });
 
@@ -374,6 +560,7 @@
                     selectedTag = clickedTag;
                     tag.classList.add('selected');
                 }
+                currentPage = 1; // Reset to first page
                 renderItems();
             });
         });
@@ -386,7 +573,14 @@
             }
         });
 
-        fetch('games.json')
+        fetch('games.json', {
+            cache: 'no-store',
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache',
+                'Expires': '0',
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 items = data;
@@ -396,6 +590,56 @@
                 console.error('Error loading game data:', error);
                 grid.innerHTML = '<p>게임 데이터를 불러오는 중 오류가 발생했습니다.</p>';
             });
+		
+		const aboutButton = document.getElementById('aboutButton');
+		const howToPlayButton = document.getElementById('howToPlayButton');
+		const aboutModal = document.getElementById('aboutModal');
+		const howToPlayModal = document.getElementById('howToPlayModal');
+
+		aboutButton.addEventListener('click', () => {
+ 		   aboutModal.style.display = 'flex';
+ 		   document.body.classList.add('modal-open');
+		});
+
+		howToPlayButton.addEventListener('click', () => {
+		    window.open('https://blog.naver.com/rikandev/223638087485', '_blank');
+		});
+
+		const closeModals = () => {
+  		  aboutModal.style.display = 'none';
+  		  howToPlayModal.style.display = 'none';
+ 		   document.body.classList.remove('modal-open');
+		};
+
+		closeModal.addEventListener('click', closeModals);
+
+		aboutModal.addEventListener('click', function(event) {
+ 		   if (event.target === aboutModal) {
+  		      closeModals();
+  		  }
+		});
+
+		howToPlayModal.addEventListener('click', function(event) {
+ 		   if (event.target === howToPlayModal) {
+ 		       closeModals();
+  		  }
+		});
+
+		// 각 모달의 닫기 버튼에 대한 이벤트 리스너 추가
+		const closeButtons = document.querySelectorAll('.close-modal');
+		
+		closeButtons.forEach(button => {
+  		  button.addEventListener('click', () => {
+    		    const modal = button.closest('.modal');
+      		  closeModals(modal);
+    		});
+		});
+
     </script>
+	
+	<footer>
+ 	   <p>Contact: <a href="mailto:rikandev@gmail.com" style="color: #d5d8e1;">rikandev@gmail.com</a></p>
+	</footer>
+
 </body>
 </html>

@@ -1,70 +1,16 @@
 [
   {
-    "name": "레트로 레이싱 3000",
-    "tags": ["Brew", "J2ME"],
-    "image": "001.jpg",
-    "Brew": "레트로 레이싱.jar",
-    "Brew2": "패치 파일.zip",
-	"Brew3": "4.zip",
-    "BrewD": "Hello World",
-    "KTF": "레트로 레이싱KTF.jar",
-	"KTFD": "ㅁㄴㅇㄹ",
-	"LGT": "asd.apk",
-	"기타": "asd.apk"
+    "name": "이노티아 연대기",
+    "tags": ["KTF", "LGT"],
+    "image": "이노티아1.jpg",
+    "info": "제작사: 컴투스<br>출시일: 2007.06.30<br>img=이노티아1-1.jpg <br>youtube=_W9CzmlreH4",
+    "KTF": "KTF이노티아1.zip",
+    "KTFD": "1. P폴더를 제외한 게임 파일들을 집어넣고, exe_info 지우고 재부팅<br>2. 최초실행하면 추가파일 다운로드 창이 뜨는데, 이 상태에서 아무것도 누르지 않고 폰 폴더/슬라이드 닫기<br>3. 다시 컴퓨터로 연결 후 P폴더 내부의 데이터 파일을 다 덮어씌운 다음 exe_info를 지우지 말고 폰 재부팅한 다음 실행<br><br>-주의사항-<br>유심이 들어있는 폰에서는 인증처리가 되지 않습니다. (유심을 넣어야 부팅되는 레인폰에서 인증불가)<br>초기 방향키가 숫자키로 되어있습니다. 환경설정에서 변경 가능합니다.",
+    "LGT": "LGT이노티아1.zip"
   },
   {
     "name": "픽셀 던전 마스터",
-    "tags": ["J2ME", "SKVM"],
+    "tags": ["JavaStation", "SKVM"],
     "image": "002.jpg"
-  },
-  {
-    "name": "갤럭시 디펜더",
-    "tags": ["Brew", "KTF"],
-    "image": "003.jpg"
-  },
-  {
-    "name": "타임워프 퍼즐",
-    "tags": ["J2ME", "LGT"],
-    "image": "004.jpg"
-  },
-  {
-    "name": "네온 나이트 라이더",
-    "tags": ["GVM", "SKVM"],
-    "image": "005.jpg"
-  },
-  {
-    "name": "사이버 닌자 어드벤처",
-    "tags": ["Brew", "KTF"],
-    "image": "006.jpg"
-  },
-  {
-    "name": "스페이스 트레이더",
-    "tags": ["J2ME", "apk"],
-    "image": "007.jpg"
-  },
-  {
-    "name": "8비트 농장 시뮬레이터",
-    "tags": ["SKVM", "ipa"],
-    "image": "008.jpg"
-  },
-  {
-    "name": "레트로 테트리스 DX",
-    "tags": ["Brew", "GVM"],
-    "image": "009.jpg"
-  },
-  {
-    "name": "픽셀 좀비 서바이벌",
-    "tags": ["J2ME", "apk"],
-    "image": "010.jpg"
-  },
-  {
-    "name": "모바일 RPG 레전드",
-    "tags": ["LGT", "SKVM"],
-    "image": "011.jpg"
-  },
-  {
-    "name": "클래식 스네이크 리마스터",
-    "tags": ["Brew", "기타"],
-    "image": "012.jpg"
   }
 ]
